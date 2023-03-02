@@ -45,7 +45,8 @@ class EqualsTest extends RefSpecStyle {
       }
     }
   }
-  object `for cat tests` {
+
+  object `from 1.5.4 Comparing Custom Types` {
     object `when I run the code in the book`{
       def `it should work` = {
         import java.util.Date
@@ -83,11 +84,9 @@ class EqualsTest extends RefSpecStyle {
         def `the same cat should equal itself` = {
           assert(catEqInstance.eqv(cat1, cat1))
         }
-
         def `two cats with same values should be equal` = {
           assert(catEqInstance.eqv(cat2, cat3))
         }
-
         def `two cats with different values will not be equal` = {
           assert(catEqInstance.neqv(cat1, cat2))
         }
@@ -98,11 +97,9 @@ class EqualsTest extends RefSpecStyle {
         def `the same cat should equal itself` = {
           assert(cat1.eqv(cat1))
         }
-
         def `two cats with same values should be equal` = {
           assert(cat2.eqv(cat3))
         }
-
         def `two cats with different values will not be equal` = {
           assert(cat1.neqv(cat2))
         }
