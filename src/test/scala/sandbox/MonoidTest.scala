@@ -4,7 +4,7 @@ import cats.Monoid
 
 class MonoidTest extends RefSpecStyle {
   object `looking at monoid` {
-    object `when the type is an Int` {
+    object `when working with the default instance for Int` {
       val intMonoid = Monoid[Int]
       def `it has the expected combine function` = {
         assert(intMonoid.combine(1,2) == 3)
@@ -21,7 +21,7 @@ class MonoidTest extends RefSpecStyle {
           val booleanAndMonoid: Monoid[Boolean] = {
             new Monoid[Boolean]{
               def combine(x: Boolean, y: Boolean): Boolean = {
-                x & y
+                x && y
               }
               def empty: Boolean = true
             }
@@ -45,7 +45,7 @@ class MonoidTest extends RefSpecStyle {
           val booleanAndMonoid: Monoid[Boolean] = {
             new Monoid[Boolean] {
               def combine(x: Boolean, y: Boolean): Boolean = {
-                x | y
+                x || y
               }
 
               def empty: Boolean = false
@@ -73,7 +73,7 @@ class MonoidTest extends RefSpecStyle {
           val booleanAndMonoid: Monoid[Boolean] = {
             new Monoid[Boolean] {
               def combine(x: Boolean, y: Boolean): Boolean = {
-                (!x & y) | (x & !y)
+                (!x && y) || (x && !y)
               }
 
               def empty: Boolean = false
@@ -101,7 +101,7 @@ class MonoidTest extends RefSpecStyle {
           val booleanAndMonoid: Monoid[Boolean] = {
             new Monoid[Boolean] {
               def combine(x: Boolean, y: Boolean): Boolean = {
-                (!x | y) & (x | !y)
+                (!x || y) && (x || !y)
               }
 
               def empty: Boolean = true
@@ -126,5 +126,4 @@ class MonoidTest extends RefSpecStyle {
       }
     }
   }
-
 }
