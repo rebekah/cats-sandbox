@@ -1,6 +1,8 @@
 package sandbox
 
-import cats.Monoid
+import cats.{Monoid, Semigroup}
+
+import scala.collection.immutable.Set
 
 class MonoidTest extends RefSpecStyle {
   object `looking at monoid` {
@@ -122,6 +124,74 @@ class MonoidTest extends RefSpecStyle {
           def `it passes for the identity function for flse` = {
             assert(booleanAndMonoid.combine(false, booleanAndMonoid.empty) == false)
           }
+        }
+      }
+    }
+  }
+  object `when doing exercise 2.4`{
+    object `for custom set monoids` {
+      object `for the combine function of monoid` {
+        class UnionMonoid[A] {
+          val monoid = new Monoid[Set[A]] {
+            def combine(x: Set[A], y: Set[A]): Set[A] = {
+              x.union(y)
+            }
+
+            def empty = Set.empty[A]
+          }
+        }
+
+        val monoid = new UnionMonoid[Int].monoid
+
+        def `it passes the test for associativity` = {
+          assert(
+            monoid.combine(Set(5, 6, 7), monoid.combine(Set(1, 2, 3), Set(3, 4, 5))) ==
+              monoid.combine(monoid.combine(Set(5, 6, 7), Set(1, 2, 3)), Set(3, 4, 5))
+          )
+        }
+
+        def `it passes for the identity function for true` = {
+          assert(monoid.combine(Set(5, 6, 7), monoid.empty) == Set(5, 6, 7))
+        }
+      }
+    }
+    object `for custom Set semigroups` {
+
+      object `for the combine function intersect` {
+        class IntersectSemigroup[A] {
+          val semigroup = new Semigroup[Set[A]] {
+            def combine(x: Set[A], y: Set[A]): Set[A] = {
+              x intersect y
+            }
+          }
+        }
+
+        val semigroup = new IntersectSemigroup[Int].semigroup
+
+        def `it passes the test for associativity` = {
+          assert(
+            semigroup.combine(Set(5, 6, 7), semigroup.combine(Set(1, 2, 3), Set(3, 4, 5))) ==
+              semigroup.combine(semigroup.combine(Set(5, 6, 7), Set(1, 2, 3)), Set(3, 4, 5))
+          )
+        }
+      }
+
+      object `for the combine function for symetric diffs` {
+        class IntersectSemigroup[A] {
+          val semigroup = new Semigroup[Set[A]] {
+            def combine(x: Set[A], y: Set[A]): Set[A] = {
+              (x diff y) union (y diff x)
+            }
+          }
+        }
+
+        val semigroup = new IntersectSemigroup[Int].semigroup
+
+        def `it passes the test for associativity` = {
+          assert(
+            semigroup.combine(Set(5, 6, 7), semigroup.combine(Set(1, 2, 3), Set(3, 4, 5))) ==
+              semigroup.combine(semigroup.combine(Set(5, 6, 7), Set(1, 2, 3)), Set(3, 4, 5))
+          )
         }
       }
     }
