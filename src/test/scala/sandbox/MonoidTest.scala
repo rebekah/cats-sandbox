@@ -196,6 +196,7 @@ class MonoidTest extends RefSpecStyle {
 
   object `when doing exercise 2.5.4 Adding All The Things` {
     import cats.syntax.semigroup._
+    
     def add[A: Monoid](listOfInts: List[A]): A = {
       listOfInts.foldLeft(Monoid[A].empty)(_ |+| _)
     }
