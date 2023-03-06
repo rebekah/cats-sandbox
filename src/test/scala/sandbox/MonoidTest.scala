@@ -2,8 +2,6 @@ package sandbox
 
 import cats.{Monoid, Semigroup}
 
-import scala.collection.immutable.Set
-
 class MonoidTest extends RefSpecStyle {
   object `looking at monoid` {
     object `when working with the default instance for Int` {
@@ -194,6 +192,20 @@ class MonoidTest extends RefSpecStyle {
           )
         }
       }
+    }
+  }
+
+  object `when doing exercise 2.5.4 Adding All The Things` {
+    import cats.syntax.semigroup._
+
+    def `using a Semigroup` = {
+      def addAllThings(listOfInts: List[Int]): Int = {
+        listOfInts.reduce((cur, next) => {
+          cur |+| next
+        })
+      }
+
+      assert(addAllThings(List(4,7,9)) == 20)
     }
   }
 }
