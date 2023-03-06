@@ -198,14 +198,22 @@ class MonoidTest extends RefSpecStyle {
   object `when doing exercise 2.5.4 Adding All The Things` {
     import cats.syntax.semigroup._
 
+    //the way this works is the import above import cats.syntax.semigroup._ imports an implicit def that takes a variable type that returns an instance of a class with the |+| defined on it.
+    //so to summarize the method returns an instance of a class with the method called so it returns that typed instance of the class for Int
     def `using a Semigroup` = {
       def addAllThings(listOfInts: List[Int]): Int = {
-        listOfInts.reduce((cur, next) => {
-          cur |+| next
-        })
+        listOfInts.reduce(_ + _)
       }
 
       assert(addAllThings(List(4,7,9)) == 20)
+    }
+
+    def `using a Semigroup for Options` = {
+      def addAllOptionalThings(listOfInts: List[Option[Int]]): Option[Int] = {
+        listOfInts.reduce(_ |+| _)
+      }
+
+      assert(addAllOptionalThings(List(Option(4), Option(7), Option(9))) == Option(20))
     }
   }
 }
