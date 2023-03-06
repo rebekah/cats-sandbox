@@ -154,7 +154,6 @@ class MonoidTest extends RefSpecStyle {
       }
     }
     object `for custom Set semigroups` {
-
       object `for the combine function intersect` {
         class IntersectSemigroup[A] {
           val semigroup = new Semigroup[Set[A]] {
@@ -197,23 +196,38 @@ class MonoidTest extends RefSpecStyle {
 
   object `when doing exercise 2.5.4 Adding All The Things` {
     import cats.syntax.semigroup._
-
-    //the way this works is the import above import cats.syntax.semigroup._ imports an implicit def that takes a variable type that returns an instance of a class with the |+| defined on it.
-    //so to summarize the method returns an instance of a class with the method called so it returns that typed instance of the class for Int
-    def `using a Semigroup` = {
-      def addAllThings(listOfInts: List[Int]): Int = {
-        listOfInts.reduce(_ + _)
-      }
-
-      assert(addAllThings(List(4,7,9)) == 20)
+    def add[A: Monoid](listOfInts: List[A]): A = {
+      listOfInts.foldLeft(Monoid[A].empty)(_ |+| _)
     }
 
-    def `using a Semigroup for Options` = {
-      def addAllOptionalThings(listOfInts: List[Option[Int]]): Option[Int] = {
-        listOfInts.reduce(_ |+| _)
+    def `using a Monoid for Int` = {
+      assert(add(List(4, 7, 9)) == 20)
+    }
+
+    def `using a Monoid for Options` = {
+      assert(add(List(Option(4), Option(7), Option(9))) == Option(20))
+    }
+
+    object `for the custom Order type` {
+      case class Order(totalCost: Double, quantity: Double)
+
+      implicit val orderMonoid: Monoid[Order] = {
+        new Monoid[Order]{
+          def combine(order1: Order, order2: Order): Order =
+            Order(
+              totalCost = order1.totalCost + order2.totalCost,
+              quantity = order1.quantity + order2.quantity
+            )
+
+          def empty = Order(0,0)
+        }
       }
 
-      assert(addAllOptionalThings(List(Option(4), Option(7), Option(9))) == Option(20))
+      def `add works for orders` = {
+        val order1 = Order(totalCost = 1.25, quantity = 1)
+        val order2 = Order(totalCost= 5.50, quantity = 2)
+        assert(add(List(order1, order2)) == Order(totalCost = 6.75, quantity = 3))
+      }
     }
   }
 }
