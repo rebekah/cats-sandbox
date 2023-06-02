@@ -69,7 +69,7 @@ class MonoidTest extends RefSpecStyle {
         }
       }
       object `with the combine of exclusive` {
-        object `with the empty of true` {
+        object `with the empty of false` {
           val booleanAndMonoid: Monoid[Boolean] = {
             new Monoid[Boolean] {
               def combine(x: Boolean, y: Boolean): Boolean = {
@@ -97,7 +97,7 @@ class MonoidTest extends RefSpecStyle {
         }
       }
       object `with the combine of exclusive nor` {
-        object `with the empty of false` {
+        object `with the empty of true` {
           val booleanAndMonoid: Monoid[Boolean] = {
             new Monoid[Boolean] {
               def combine(x: Boolean, y: Boolean): Boolean = {
@@ -196,9 +196,9 @@ class MonoidTest extends RefSpecStyle {
 
   object `when doing exercise 2.5.4 Adding All The Things` {
     import cats.syntax.semigroup._
-    
-    def add[A: Monoid](listOfInts: List[A]): A = {
-      listOfInts.foldLeft(Monoid[A].empty)(_ |+| _)
+
+    def add[A: Monoid](list: List[A]): A = {
+      list.foldLeft(Monoid[A].empty)(_ |+| _)
     }
 
     def `using a Monoid for Int` = {
