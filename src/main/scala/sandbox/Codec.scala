@@ -24,8 +24,18 @@ object Codec {
   }
 
   implicit val doubleCodec: Codec[Double] =
-    Codec.stringCodec.imap[Double](_.toDouble, _.toString)
+    stringCodec.imap[Double](_.toDouble, _.toString)
 
-  implicit def boxCodec[A](implicit printable: Printable[Box[A]], fromString: FromString[Box[A]]): Codec[Box[A]] =
-    Codec.stringCodec.imap(fromString.translate, printable.format)
+  def strToCat(str: String): Cat = {
+    val nameSplit = str.split(" is a ")
+    val ageSplit = nameSplit(1).split(" year old ")
+    val colorSplit = ageSplit(1).split(" cat.")
+    Cat(nameSplit(0), ageSplit(0).toInt, colorSplit(0))
+  }
+
+  implicit def catCodec(implicit printable: Printable[Cat]): Codec[Cat] =
+    stringCodec.imap[Cat](strToCat(_), printable.format(_))
+
+  implicit def boxCodec[A](implicit codec: Codec[A]): Codec[Box[A]] =
+    codec.imap(Box(_), _.value)
 }
