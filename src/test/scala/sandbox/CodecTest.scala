@@ -1,6 +1,6 @@
 package sandbox
 
-import sandbox.PrintableInstances.{catPrintable, printableBox}
+import sandbox.PrintableInstances.catPrintable
 
 class CodecTest extends RefSpecStyle {
   object `playing with imap` {
