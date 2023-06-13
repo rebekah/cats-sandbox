@@ -4,10 +4,10 @@ trait Printable[A] {
   self =>
   def format(value: A): String
 
-  def contramap[B](func: B => A): Printable[B] =
+  def contramap[B](translateIn: B => A): Printable[B] =
     new Printable[B] {
-      def format(value: B) =
-        self.format(func(value))
+      def format(value: B): String =
+        self.format(translateIn(value))
     }
 }
 
